@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+      PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.codepresso.mapper.memberMapper">
+	<resultMap id="memResult" type="memberVO">
+		<result property="id" column="id" />
+		<result property="user_Id" column="user_id" />
+		<result property="password" column="password" />
+		<result property="username" column="username" />
+		<result property="createdAt" column="created_at" />
+		<result property="token" column="token" />
+	</resultMap>
+
+	<resultMap id="userResult" type="UserVO">
+		<result property="id" column="id" />
+		<result property="username" column="username" />
+		<result property="createdAt" column="created_at" />
+	</resultMap>
+
+	<resultMap id="postResult" type="postVO">
+		<result property="id" column="id" />
+		<result property="user_Id" column="user_id" />
+		<result property="content" column="content" />
+		<result property="title" column="title" />
+		<result property="created_At" column="created_at" />
+	</resultMap>
+
+
+
+
+
+	<select id="selectAllMemberList" resultMap="memResult">
+      <![CDATA[
+         select * from codepresso.sns_test	
+      ]]>
+	</select>
+
+	<select id="selectByUserName" resultMap="memResult">
+      <![CDATA[
+         select * from codepresso.sns_test
+         where username = #{username}
+      ]]>
+	</select>
+	<select id="selectByPassWord" resultMap="memResult">
+      <![CDATA[
+         select * from codepresso.sns_test
+         where password = #{password}
+      ]]>
+	</select>
+
+	<select id="selectByID" resultMap="memResult">
+      <![CDATA[
+         select * from codepresso.sns_test
+         where id = #{id}
+      ]]>
+	</select>
+	<select id="selectByUserID" resultMap="userResult">
+      <![CDATA[
+         select id,username,created_at from codepresso.sns_test
+         where id = #{id}
+         
+      ]]>
+	</select>
+
+
+
+	<insert id="insertMember" parameterType="memberVO">
+		<![CDATA[
+		 insert into codepresso.sns_test(password, username, created_at)
+		 values(#{password}, #{username}, #{createdAt})
+		]]>
+	</insert>
+	<insert id="inserttoken" parameterType="memberVO">
+		<![CDATA[
+		 insert into codepresso.token(token, user_id, created_at)
+		 values(#{token}, #{id}, #{createdAt})
+		]]>
+	</insert>
+	<select id="selectByToken" resultMap="memResult">
+      <![CDATA[
+         select * from codepresso.token
+         where user_id = #{id}
+      ]]>
+	</select>
+
+
+	<select id="selectAllPost" resultMap="postResult">
+      <![CDATA[
+         select * from codepresso.post
+         ORDER BY created_at DESC	
+      ]]>
+	</select>
+
+	<insert id="insertPost" parameterType="postVO">
+		<![CDATA[
+		 insert into codepresso.post(user_id,title, content)
+		 values(#{user_Id},#{title}, #{content})
+		]]>
+	</insert>
+	<select id="SelectPostById" resultMap="postResult">
+      <![CDATA[
+         select * from codepresso.post
+         where user_Id = #{user_Id}
+         ORDER BY created_at DESC	
+      ]]>
+	</select>
+
+	<select id="SelectIdByToken" resultMap="memResult">
+      <![CDATA[
+         select * from codepresso.token
+         where token = #{token}
+      ]]>
+	</select>
+
+	<select id="SelectByPostId" resultMap="postResult">
+      <![CDATA[
+         select * from codepresso.post
+         where id = #{id}	
+      ]]>
+	</select>
+
+	<delete id="deletePost" parameterType="postVO">
+		<![CDATA[
+	   delete from codepresso.post
+	   where
+	   id=#{id}
+	]]>
+	</delete>
+	<update id="updatePost" parameterType="postVO">
+		<![CDATA[
+	   update codepresso.post
+	   set title = #{title},content = #{content}
+	   where
+	   id=#{id}
+	]]>
+	</update>
+
+</mapper>
