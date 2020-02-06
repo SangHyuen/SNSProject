@@ -54,12 +54,13 @@ public class PostController {
 			userVO = memberService.selectByUserID(reqPostVO.getUser_Id());
 			reqPostVO.setUser(userVO);
 			logger.info("try OK");
-			reVO.setCode(HttpStatus.OK);
-			reVO.setMessage("200");
+			reVO.setCode("200");
+			reVO.setMessage("Success");
 			reVO.setData(reqPostVO);
 			resEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
 		} catch (Exception e) {
 			e.getStackTrace();
+			reVO.setCode("500");
 			reVO.setMessage("error");
 			resEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.BAD_REQUEST);
 		}
@@ -76,12 +77,13 @@ public class PostController {
 		List<MemberVO> userlist = new ArrayList<MemberVO>();
 		try {
 			memberService.InsertUser(selectlist);
-			reVO.setCode(HttpStatus.OK);
-			reVO.setMessage("200");
+			reVO.setCode("200");
+			reVO.setMessage("Success");
 			reVO.setData(selectlist);
 			resEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
 		} catch (Exception e) {
 			e.getStackTrace();
+			reVO.setCode("500");
 			reVO.setMessage("error");
 			resEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.BAD_REQUEST);
 		}
@@ -96,12 +98,13 @@ public class PostController {
 		ResponseEntity<ReturnVO> resEntity;
 		memberService.InsertUser(myVO);
 		try {
-			reVO.setCode(HttpStatus.OK);
-			reVO.setMessage("200");
+			reVO.setCode("200");
+			reVO.setMessage("Success");
 			reVO.setData(myVO);
 			resEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
 		} catch (Exception e) {
 			e.getStackTrace();
+			reVO.setCode("500");
 			reVO.setMessage("error");
 			resEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.BAD_REQUEST);
 		}
@@ -115,13 +118,14 @@ public class PostController {
 		try {
 			PostVO myVO = postService.SelectByPostId(postID);
 			UserVO detailUser = memberService.selectByUserID(myVO.getUser_Id());
-			reVO.setCode(HttpStatus.OK);
-			reVO.setMessage("200");
+			reVO.setCode("200");
+			reVO.setMessage("Success");
 			myVO.setUser(detailUser);
 			reVO.setData(myVO);
 			resEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
 		} catch (Exception e) {
 			e.getStackTrace();
+			reVO.setCode("500");
 			reVO.setMessage("error");
 			resEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.BAD_REQUEST);
 		}
@@ -136,12 +140,13 @@ public class PostController {
 		memberVO = memberService.SelectIdByToken(cookieToken);
 		if (postVO.getUser_Id() == memberVO.getUser_Id()) {
 			int delResult = postService.deletePost(postVO.getId());
-			reVO.setCode(HttpStatus.OK);
-			reVO.setMessage("200");
+			reVO.setCode("200");
+			reVO.setMessage("Success");
 			try {
 				resEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
 			} catch (Exception e) {
 				e.getStackTrace();
+				reVO.setCode("400");
 				reVO.setMessage("error");
 				resEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.BAD_REQUEST);
 			}
@@ -163,14 +168,15 @@ public class PostController {
 			postVO.setTitle(updatePost.getTitle());
 			postVO.setContent(updatePost.getContent());
 			int delResult = postService.updatePost(postVO);
-			reVO.setCode(HttpStatus.OK);
-			reVO.setMessage("200");
+			reVO.setCode("200");
+			reVO.setMessage("success");
 			reVO.setData(postVO);
 			try {
 				resEntity = new ResponseEntity<ReturnVO> (reVO, HttpStatus.OK);
 			} catch (Exception e) {
 				e.getStackTrace();
-				reVO.setMessage("error");
+				reVO.setCode("500");
+				reVO.setMessage("Error");
 				resEntity = new ResponseEntity<ReturnVO> (reVO, HttpStatus.BAD_REQUEST);
 			}
 		} else {

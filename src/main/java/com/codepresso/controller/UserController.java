@@ -57,11 +57,12 @@ public class UserController {
 				System.out.println(memberVO.toString());
 				int result = memberService.insertMember(memberVO);
 				reVO.setData(memberVO);
-				reVO.setCode(HttpStatus.OK);
-				reVO.setMessage("200");
+				reVO.setCode("200");
+				reVO.setMessage("Succcess");
 				reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
 			} catch (Exception e) {
 				e.printStackTrace();
+				reVO.setCode("500");
 				reVO.setMessage("error");
 				reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.BAD_REQUEST);
 			}
@@ -83,12 +84,13 @@ public class UserController {
 			tokenMember = memberService.selectByToken(loginMember.getId());
 			loginMember = memberService.TokenCheck(loginMember, tokenMember);
 			logger.info("userlogin OK");
-			reVO.setCode(HttpStatus.OK);
-			reVO.setMessage("200");
+			reVO.setCode("200");
+			reVO.setMessage("Success");
 			reVO.setData(loginMember);
 			reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
+			reVO.setCode("500");
 			reVO.setMessage("error");
 			reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.BAD_REQUEST);
 		}
@@ -105,12 +107,13 @@ public class UserController {
 		try {
 			logger.info("adduser OK");
 			test = memberService.selectByID(requestIntId);
-			reVO.setCode(HttpStatus.OK);
-			reVO.setMessage("200");
+			reVO.setCode("200");
+			reVO.setMessage("Success");
 			reVO.setData(test);
 			reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
+			reVO.setCode("500");
 			reVO.setMessage("error");
 			reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.BAD_REQUEST);
 		}

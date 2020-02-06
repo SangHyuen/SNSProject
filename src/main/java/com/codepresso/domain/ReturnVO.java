@@ -12,10 +12,10 @@ import com.codepresso.repository.*;
 public class ReturnVO {
 	
 	private Object data;
-	private HttpStatus code;
+	private String code;
 	private String message;
 
-	public void setCode(HttpStatus hs) {
+	public void setCode(String hs) {
 		this.code = hs;
 	}
 	public void setMessage(String message) {
@@ -24,7 +24,7 @@ public class ReturnVO {
 	public void setData(Object vo) {
 		this.data = vo;
 	}
-	public HttpStatus getCode() {
+	public String getCode() {
 		return code;
 	}
 	public String getMessage() {
