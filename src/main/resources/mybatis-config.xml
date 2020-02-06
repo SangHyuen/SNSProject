@@ -4,8 +4,8 @@
    "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
-		<typeAlias type="com.codepresso.repository.MemberVO" alias = "memberVO" />
-		<typeAlias type="com.codepresso.repository.UserVO" alias = "userVO" />
-		<typeAlias type="com.codepresso.repository.post.PostVO" alias ="postVO" />
+		<typeAlias type="com.codepresso.domain.MemberVO" alias = "memberVO" />
+		<typeAlias type="com.codepresso.domain.UserVO" alias = "userVO" />
+		<typeAlias type="com.codepresso.domain.PostVO" alias ="postVO" />
 	</typeAliases>
 </configuration>

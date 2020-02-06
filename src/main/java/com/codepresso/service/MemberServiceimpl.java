@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
-import com.codepresso.repository.MemberDAOimpl;
-import com.codepresso.repository.MemberVO;
-import com.codepresso.repository.UserVO;
+import com.codepresso.domain.MemberVO;
+import com.codepresso.domain.PostVO;
+import com.codepresso.domain.UserVO;
+import com.codepresso.repository.member.MemberDAOimpl;
 
 @Repository
 public class MemberServiceimpl {
@@ -18,6 +19,9 @@ public class MemberServiceimpl {
 	
 	public List selectAllMemberList() {
 		return memberDAO.selectAllMemberList();
+	}
+	public MemberVO selectByUserCheck(MemberVO memberVO) throws DataAccessException {
+		return memberDAO.selectByUserCheck(memberVO);
 	}
 	public MemberVO selectByUserName(String userName) throws DataAccessException {
 		return memberDAO.selectByUserName(userName);
@@ -31,8 +35,8 @@ public class MemberServiceimpl {
 	public int insertMember(MemberVO memberVO) throws DataAccessException {
 		return memberDAO.insertMember(memberVO);
 	}
-	public int loginmember(MemberVO memberVO) throws DataAccessException {
-		return memberDAO.loginmember(memberVO);
+	public int insertToken(MemberVO memberVO) throws DataAccessException {
+		return memberDAO.insertToken(memberVO);
 	}
 	public MemberVO selectByToken(int id) throws DataAccessException {
 		return memberDAO.selectByToken(id);
@@ -43,6 +47,26 @@ public class MemberServiceimpl {
 	}
 	public UserVO selectByUserID(int id) throws DataAccessException {
 		return memberDAO.selectByUserID(id);
+	}
+	
+	public List<PostVO> InsertUser(List<PostVO> selList) {
+		for (PostVO pv : selList) {
+			UserVO vo = selectByUserID(pv.getUser_Id());
+			pv.setUser(vo);
+		}
+		return selList;
+	}
+	public MemberVO TokenCheck(MemberVO loginMemberVO,MemberVO tokenMemberVO) {
+		if(tokenMemberVO == null) {
+			loginMemberVO.setToken();
+			loginMemberVO.setCreatedAt();
+			int result = insertToken(loginMemberVO);
+		}
+		else {
+			loginMemberVO.setToken(tokenMemberVO.getToken());
+		}
+		return loginMemberVO;
+		
 	}
 
 }

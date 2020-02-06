@@ -1,4 +1,4 @@
-package com.codepresso.repository;
+package com.codepresso.domain;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import com.codepresso.repository.post.PostVO;
 import com.codepresso.repository.*;
 
 @Component

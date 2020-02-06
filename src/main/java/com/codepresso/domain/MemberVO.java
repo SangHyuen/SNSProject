@@ -1,4 +1,4 @@
-package com.codepresso.repository;
+package com.codepresso.domain;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

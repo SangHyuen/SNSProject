@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 
+import com.codepresso.domain.PostVO;
+
 public interface PostDAO {
 
 	List selectAllPost() throws DataAccessException;

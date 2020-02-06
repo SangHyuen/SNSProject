@@ -19,16 +19,6 @@
 		<result property="createdAt" column="created_at" />
 	</resultMap>
 
-	<resultMap id="postResult" type="postVO">
-		<result property="id" column="id" />
-		<result property="user_Id" column="user_id" />
-		<result property="content" column="content" />
-		<result property="title" column="title" />
-		<result property="created_At" column="created_at" />
-	</resultMap>
-
-
-
 
 
 	<select id="selectAllMemberList" resultMap="memResult">
@@ -37,7 +27,13 @@
       ]]>
 	</select>
 
-	<select id="selectByUserName" resultMap="memResult">
+	<select id="selectByUserCheck" resultMap="memResult" parameterType="memberVO">
+      <![CDATA[
+         select * from codepresso.sns_test
+         where username = #{username} AND password = #{password}
+      ]]>
+      </select>
+      <select id="selectByUserName" resultMap="memResult" >
       <![CDATA[
          select * from codepresso.sns_test
          where username = #{username}
@@ -64,46 +60,24 @@
       ]]>
 	</select>
 
-
-
 	<insert id="insertMember" parameterType="memberVO">
 		<![CDATA[
 		 insert into codepresso.sns_test(password, username, created_at)
 		 values(#{password}, #{username}, #{createdAt})
 		]]>
 	</insert>
+	
 	<insert id="inserttoken" parameterType="memberVO">
 		<![CDATA[
 		 insert into codepresso.token(token, user_id, created_at)
 		 values(#{token}, #{id}, #{createdAt})
 		]]>
 	</insert>
+	
 	<select id="selectByToken" resultMap="memResult">
       <![CDATA[
          select * from codepresso.token
          where user_id = #{id}
-      ]]>
-	</select>
-
-
-	<select id="selectAllPost" resultMap="postResult">
-      <![CDATA[
-         select * from codepresso.post
-         ORDER BY created_at DESC	
-      ]]>
-	</select>
-
-	<insert id="insertPost" parameterType="postVO">
-		<![CDATA[
-		 insert into codepresso.post(user_id,title, content)
-		 values(#{user_Id},#{title}, #{content})
-		]]>
-	</insert>
-	<select id="SelectPostById" resultMap="postResult">
-      <![CDATA[
-         select * from codepresso.post
-         where user_Id = #{user_Id}
-         ORDER BY created_at DESC	
       ]]>
 	</select>
 
@@ -114,27 +88,5 @@
       ]]>
 	</select>
 
-	<select id="SelectByPostId" resultMap="postResult">
-      <![CDATA[
-         select * from codepresso.post
-         where id = #{id}	
-      ]]>
-	</select>
-
-	<delete id="deletePost" parameterType="postVO">
-		<![CDATA[
-	   delete from codepresso.post
-	   where
-	   id=#{id}
-	]]>
-	</delete>
-	<update id="updatePost" parameterType="postVO">
-		<![CDATA[
-	   update codepresso.post
-	   set title = #{title},content = #{content}
-	   where
-	   id=#{id}
-	]]>
-	</update>
 
 </mapper>

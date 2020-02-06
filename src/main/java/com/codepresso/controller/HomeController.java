@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.codepresso.repository.MemberVO;
-import com.codepresso.repository.post.PostVO;
+import com.codepresso.domain.MemberVO;
+import com.codepresso.domain.PostVO;
 import com.codepresso.service.MemberServiceimpl;
 import com.codepresso.service.PostService;
 

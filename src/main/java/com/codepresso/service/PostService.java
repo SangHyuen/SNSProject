@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
+import com.codepresso.domain.PostVO;
 import com.codepresso.repository.post.PostDAOimpl;
-import com.codepresso.repository.post.PostVO;
 
 @Repository
 public class PostService {

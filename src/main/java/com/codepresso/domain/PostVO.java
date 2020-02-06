@@ -1,4 +1,4 @@
-package com.codepresso.repository.post;
+package com.codepresso.domain;
 
 import java.awt.List;
 

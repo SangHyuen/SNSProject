@@ -1,4 +1,4 @@
-package com.codepresso.repository;
+package com.codepresso.repository.member;
 
 import java.util.List;
 
@@ -9,6 +9,9 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+
+import com.codepresso.domain.MemberVO;
+import com.codepresso.domain.UserVO;
 import com.codepresso.repository.*;
 
 @Repository
@@ -23,6 +26,11 @@ public class MemberDAOimpl implements MemberDAO{
 		List<MemberVO> membersList = sqlSession.selectList("com.codepresso.mapper.memberMapper.selectAllMemberList");
 
 		return membersList;
+	}
+	@Override
+	public MemberVO selectByUserCheck(MemberVO memberVO) throws DataAccessException {
+		MemberVO testmember = sqlSession.selectOne("com.codepresso.mapper.memberMapper.selectByUserCheck",memberVO);
+		return testmember;
 	}
 	@Override
 	public MemberVO selectByUserName(String userName) throws DataAccessException {
@@ -61,7 +69,7 @@ public class MemberDAOimpl implements MemberDAO{
 		return result;
 	}
 	@Override
-	public int loginmember(MemberVO memberVO) throws DataAccessException {
+	public int insertToken(MemberVO memberVO) throws DataAccessException {
 
 		int result = sqlSession.insert("com.codepresso.mapper.memberMapper.inserttoken", memberVO);
 		return result;
