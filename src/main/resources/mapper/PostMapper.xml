@@ -3,7 +3,7 @@
       PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.codepresso.mapper.PostMapper">
+<mapper namespace="com.codepresso.mapper.postMapper">
 
 	<resultMap id="postResult" type="postVO">
 		<result property="id" column="id" />
@@ -27,7 +27,7 @@
 		 values(#{user_Id},#{title}, #{content})
 		]]>
 	</insert>
-	<select id="SelectPostById" resultMap="postResult">
+	<select id="selectPostById" resultMap="postResult">
       <![CDATA[
          select * from codepresso.post
          where user_Id = #{user_Id}
@@ -35,7 +35,7 @@
       ]]>
 	</select>
 
-	<select id="SelectByPostId" resultMap="postResult">
+	<select id="selectByPostId" resultMap="postResult">
       <![CDATA[
          select * from codepresso.post
          where id = #{id}	
@@ -57,5 +57,16 @@
 	   id=#{id}
 	]]>
 	</update>
+	<select id="selectOnePostById" resultMap="postResult">
+      <![CDATA[
+         select * from codepresso.post
+         where user_Id = #{user_Id}
+         ORDER BY created_at DESC
+         Limit 1	
+      ]]>
+	</select>
+
+
+
 
 </mapper>

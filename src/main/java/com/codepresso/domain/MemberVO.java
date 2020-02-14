@@ -59,8 +59,8 @@ public class MemberVO {
 	public void setCreatedAt() {
 		Date now = new Date();
 		SimpleDateFormat B = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String dateform = B.format(now);
-		this.createdAt = dateform;
+		String dateForm = B.format(now);
+		this.createdAt = dateForm;
 	}
 
 	public String getToken() {

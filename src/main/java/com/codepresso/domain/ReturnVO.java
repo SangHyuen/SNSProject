@@ -33,6 +33,10 @@ public class ReturnVO {
 	public Object getData() {
 		return data;
 	}
+	@Override
+	public String toString() {
+		return "ReturnVO [data=" + data + ", code=" + code + ", message=" + message + "]";
+	}
 
 
 }

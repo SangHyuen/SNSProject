@@ -7,5 +7,7 @@
 		<typeAlias type="com.codepresso.domain.MemberVO" alias = "memberVO" />
 		<typeAlias type="com.codepresso.domain.UserVO" alias = "userVO" />
 		<typeAlias type="com.codepresso.domain.PostVO" alias ="postVO" />
+		<typeAlias type="com.codepresso.domain.FollowVO" alias ="followVO" />
+		<typeAlias type="com.codepresso.domain.FeedVO" alias ="feedVO" />
 	</typeAliases>
 </configuration>

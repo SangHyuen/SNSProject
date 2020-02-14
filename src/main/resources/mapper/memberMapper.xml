@@ -13,9 +13,21 @@
 		<result property="token" column="token" />
 	</resultMap>
 
-	<resultMap id="userResult" type="UserVO">
+	<resultMap id="userResult" type="userVO">
 		<result property="id" column="id" />
 		<result property="username" column="username" />
+		<result property="createdAt" column="created_at" />
+		<result property="isFollow" column="isFollow" />
+	</resultMap>
+	<resultMap id="followResult" type="followVO">
+		<result property="followeeId" column="followee_id" />
+		<result property="followerId" column="follower_id" />
+		<result property="createdAt" column="created_at" />
+	</resultMap>
+		<resultMap id="feedResult" type="feedVO">
+		<result property="userId" column="user_id" />
+		<result property="followeeId" column="followee_id" />
+		<result property="postId" column="post_id" />
 		<result property="createdAt" column="created_at" />
 	</resultMap>
 
@@ -55,7 +67,7 @@
 	<select id="selectByUserID" resultMap="userResult">
       <![CDATA[
          select id,username,created_at from codepresso.sns_test
-         where id = #{id}
+         where id = #{user_Id}
          
       ]]>
 	</select>
@@ -87,6 +99,59 @@
          where token = #{token}
       ]]>
 	</select>
-
+	<insert id="insertFollow" parameterType="followVO">
+		<![CDATA[
+		 insert into codepresso.follow(followee_id, follower_id)
+		 values(#{followeeId}, #{followerId})
+		]]>
+	</insert>
+	<select id="selectByFollowId" resultMap="followResult">
+      <![CDATA[
+         select * from codepresso.follow
+         where follower_id = #{followerId} AND followee_id = #{followeeId}
+      ]]>
+	</select>
+	<insert id="insertFeed" parameterType="followVO">
+		<![CDATA[
+		 insert into codepresso.feed(user_id,followee_id, post_id)
+		 values(#{userId}, #{followeeId},#{postId})
+		]]>
+	</insert>
+	<delete id="deleteFollow" parameterType="feedVO">
+		<![CDATA[
+	   delete from codepresso.follow
+	   where
+	   follower_id = #{followerId} AND followee_id = #{followeeId}
+	]]>
+	</delete>
+	<delete id="deleteFeed" parameterType="feedVO">
+		<![CDATA[
+		 delete from codepresso.feed
+		 where
+		 user_id=#{userId} AND followee_id=#{followeeId}
+		]]>
+	</delete>
+	
+	<select id="selectFeedById" resultMap="feedResult">
+      <![CDATA[
+         select * from codepresso.feed
+         where user_id=#{userId}
+         order By created_at DESC
+      ]]>
+	</select>
+	
+	<select id="selectFolloweeId" resultMap="userResult" parameterType="feedVO">
+      <![CDATA[
+         select followee_id as isFollow from codepresso.follow
+         where follower_id = #{followerId} AND followee_id = #{followeeId}
+      ]]>
+	</select>
+	
+	<select id="selectFollowerId" resultMap="followResult">
+      <![CDATA[
+         select * from codepresso.follow
+         where followee_id = #{followeeId}
+      ]]>
+      </select>
 
 </mapper>

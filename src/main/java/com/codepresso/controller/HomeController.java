@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +51,7 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+/*	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
@@ -61,8 +62,8 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "signup";
-	}
+		return "";
+	}*/
 	@RequestMapping(value = "/login")
 	public ModelAndView login() {
 		ModelAndView mav = new ModelAndView();
@@ -75,12 +76,7 @@ public class HomeController {
 		mav.setViewName("signup");
 		return mav;
 	}
-	@RequestMapping(value = "/index")
-	public ModelAndView index(){
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName("index");
-		return mav;
-	}
+
 	@RequestMapping(value = "/post/detail/{postId}", method = RequestMethod.GET)
 	public ModelAndView detail(@PathVariable ("postId") int postID){
 
@@ -90,12 +86,14 @@ public class HomeController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	public ModelAndView postMy(){
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView postMy(@CookieValue(value = "accesstoken",required = false) String cookieToken){
 		MemberVO memVO = new MemberVO();
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("index");
+		if(cookieToken != null) {
 		mav.addObject("user",memVO);
+		}
 		return mav;
 	}
 

@@ -1,5 +1,6 @@
 package com.codepresso.repository.member;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
+import com.codepresso.domain.FeedVO;
+import com.codepresso.domain.FollowVO;
 import com.codepresso.domain.MemberVO;
 import com.codepresso.domain.UserVO;
 import com.codepresso.repository.*;
@@ -21,7 +24,7 @@ public class MemberDAOimpl implements MemberDAO{
 	private SqlSession sqlSession ;
 
 	@Override
-	public List selectAllMemberList() throws DataAccessException {
+	public List<MemberVO> selectAllMemberList() throws DataAccessException {
 
 		List<MemberVO> membersList = sqlSession.selectList("com.codepresso.mapper.memberMapper.selectAllMemberList");
 
@@ -57,11 +60,7 @@ public class MemberDAOimpl implements MemberDAO{
 		MemberVO testmember = sqlSession.selectOne("com.codepresso.mapper.memberMapper.selectByToken",id);
 		return testmember;
 	}
-	@Override
-	public List selectByID() throws DataAccessException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 	@Override
 	public int insertMember(MemberVO memberVO) throws DataAccessException {
 
@@ -75,23 +74,54 @@ public class MemberDAOimpl implements MemberDAO{
 		return result;
 	}
 	@Override
-	public MemberVO SelectIdByToken(String memberToken) throws DataAccessException{
+	public MemberVO selectIdByToken(String memberToken) throws DataAccessException{
 		MemberVO selectId = sqlSession.selectOne("com.codepresso.mapper.memberMapper.SelectIdByToken",memberToken);
 		return selectId;
 	}
-
-
-	/*
-	public int deleteMember(Integer Id) throws DataAccessException {
-		int result = sqlSession.delete("mapper.member.deleteMember", Id);
+	
+	@Override
+	public int insertFollow(FollowVO insertFollowVO) throws DataAccessException{
+		int followResult = sqlSession.insert("com.codepresso.mapper.memberMapper.insertFollow",insertFollowVO);
+		return followResult;
+	}
+	@Override
+	public FollowVO selectByFollowId(FollowVO selectFollowVO) throws DataAccessException {
+		FollowVO followVO = sqlSession.selectOne("com.codepresso.mapper.memberMapper.selectByFollowId",selectFollowVO);
+		return followVO;
+	}
+	@Override
+	public List<FollowVO> selectFollowerId(int followeeId) throws DataAccessException {
+		List<FollowVO> followVO = sqlSession.selectList("com.codepresso.mapper.memberMapper.selectFollowerId",followeeId);
+		return followVO;
+	}
+	@Override
+	public int insertFeed(FeedVO insertFeedVO) throws DataAccessException{
+		int followResult = sqlSession.insert("com.codepresso.mapper.memberMapper.insertFeed",insertFeedVO);
+		return followResult;
+	}
+	
+	@Override
+	public int deleteFollow(FollowVO deleteFollowing) throws DataAccessException {
+		int result = sqlSession.delete("com.codepresso.mapper.memberMapper.deleteFollow", deleteFollowing);
 		return result;
 	}
-	*/
-	public MemberVO loginById(Integer userId) throws DataAccessException{
-		  MemberVO vo = sqlSession.selectOne("mapper.member.loginById",userId);
-
-		return vo;
+	@Override
+	public int deleteFeed(FeedVO deleteFeeding) throws DataAccessException {
+		int result = sqlSession.delete("com.codepresso.mapper.memberMapper.deleteFeed", deleteFeeding);
+		return result;
 	}
+	@Override
+	public List<FeedVO> selectFeedById(int user_Id) throws DataAccessException {
+		List<FeedVO> resultFeed = sqlSession.selectList("com.codepresso.mapper.memberMapper.selectFeedById",user_Id);
+		return resultFeed;
+	}
+
+	@Override
+	public UserVO selectFolloweeId(FollowVO followVO)throws DataAccessException{
+		UserVO resultFollowee = sqlSession.selectOne("com.codepresso.mapper.memberMapper.selectFolloweeId",followVO);
+		return resultFollowee;
+	}
+
 
 
 	@Override
@@ -106,12 +136,16 @@ public class MemberDAOimpl implements MemberDAO{
 		// TODO Auto-generated method stub
 		return null;
 	}
-/*
 	@Override
-	public int insertMember(MemberVO memberVO) throws DataAccessException {
+	public List selectByID() throws DataAccessException {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
-	*/
+	@Override
+	public UserVO selectFolloweeId(HashMap memberMap) throws DataAccessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

@@ -6,7 +6,7 @@ $(document).ready(function(){
 		var password = $('#login_password').val();
 		
 		if(!username || !password) {
-			alert("No Blink!");
+			alert("필수 항목을 채워주세요.");
 			return;
 		}
 		
@@ -23,10 +23,9 @@ $(document).ready(function(){
             data: JSON.stringify(param)
 	    }).then(function(data) {	    	
 	    	document.cookie = "accesstoken=" + data.data.token;
-	    	alert(data.data.token);
 	    	window.location.href = '/';
 	    }, function(err) {
-	    	alert("Error, Mismatch User");
+	    	alert("계정 정보를 확인해주세요.");
 	    	window.location.reload();
 	    });
 		return false;

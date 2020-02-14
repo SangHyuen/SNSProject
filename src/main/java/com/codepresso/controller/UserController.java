@@ -9,18 +9,25 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.codepresso.domain.FollowVO;
 import com.codepresso.domain.MemberVO;
+import com.codepresso.domain.PostVO;
 import com.codepresso.domain.ReturnVO;
 import com.codepresso.service.MemberServiceimpl;
+import com.codepresso.service.PostService;
 
 @RestController
 @RequestMapping(value = "/*")
 public class UserController {
+	private static final int ReturnVO = 0;
+
 	static Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
@@ -28,18 +35,16 @@ public class UserController {
 
 	@Autowired
 	MemberVO memberVO;
+	@Autowired
+	PostService postService;
 
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	public ResponseEntity<List<MemberVO>> listArticles(@RequestBody MemberVO memberVO) {
 
 		List<MemberVO> selectlist = memberService.selectAllMemberList();
 		ResponseEntity<List<MemberVO>> resEntity;
-		try {
-			resEntity = new ResponseEntity<List<MemberVO>>(selectlist, HttpStatus.OK);
-		} catch (Exception e) {
-			e.getStackTrace();
-			resEntity = new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
+		resEntity = new ResponseEntity<List<MemberVO>>(selectlist, HttpStatus.OK);
+
 		return resEntity;
 	}
 
@@ -48,28 +53,18 @@ public class UserController {
 		ReturnVO reVO = new ReturnVO();
 		ResponseEntity<ReturnVO> reEntity = null;
 		MemberVO checkVO = null;
-		System.out.println("name = "+memberVO.getUsername());
 		checkVO = memberService.selectByUserName(memberVO.getUsername());
-		System.out.println("checkVO = "+checkVO);
-		if (checkVO == null) {
-			try {
-				memberVO.setCreatedAt();
-				System.out.println(memberVO.toString());
-				int result = memberService.insertMember(memberVO);
-				reVO.setData(memberVO);
-				reVO.setCode("200");
-				reVO.setMessage("Succcess");
-				reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
-			} catch (Exception e) {
-				e.printStackTrace();
-				reVO.setCode("500");
-				reVO.setMessage("error");
-				reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.BAD_REQUEST);
-			}
-		}else {
-			reVO.setMessage("User already exists");
+
+		if (checkVO != null) {
+			reVO.setCode("400");
+			reVO.setMessage("Already User");
+			reVO.setData("Error");
 			reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.BAD_REQUEST);
 		}
+		memberVO.setCreatedAt();
+		reVO = memberService.signupUser(memberVO);
+		reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
+
 		return reEntity;
 	}
 
@@ -78,22 +73,16 @@ public class UserController {
 		MemberVO loginMember;
 		ResponseEntity<ReturnVO> reEntity = null;
 		ReturnVO reVO = new ReturnVO();
-		try {
-			loginMember = memberService.selectByUserCheck(memberVO);
-			MemberVO tokenMember = null;
-			tokenMember = memberService.selectByToken(loginMember.getId());
-			loginMember = memberService.TokenCheck(loginMember, tokenMember);
-			logger.info("userlogin OK");
-			reVO.setCode("200");
-			reVO.setMessage("Success");
-			reVO.setData(loginMember);
-			reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			reVO.setCode("500");
-			reVO.setMessage("error");
-			reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.BAD_REQUEST);
-		}
+
+		loginMember = memberService.selectByUserCheck(memberVO);
+		MemberVO tokenMember = null;
+
+		tokenMember = memberService.selectByToken(loginMember.getId());
+		reVO = memberService.TokenCheck(loginMember, tokenMember);
+
+		logger.info("userlogin OK");
+		reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
+
 		return reEntity;
 	}
 
@@ -104,20 +93,39 @@ public class UserController {
 		int requestIntId = Integer.parseInt(requestId);
 		MemberVO test = new MemberVO();
 		ReturnVO reVO = new ReturnVO();
-		try {
-			logger.info("adduser OK");
-			test = memberService.selectByID(requestIntId);
-			reVO.setCode("200");
-			reVO.setMessage("Success");
-			reVO.setData(test);
-			reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-			reVO.setCode("500");
-			reVO.setMessage("error");
-			reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.BAD_REQUEST);
-		}
+		logger.info("adduser OK");
+		reVO = memberService.selectByID(test, requestIntId);
+
+		reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
+
 		return reEntity;
+	}
+
+	@RequestMapping(value = "/follow", method = RequestMethod.POST)
+	public ResponseEntity<ReturnVO> followUser(@RequestBody FollowVO followVO,
+			@CookieValue(value = "accesstoken") String cookieToken) {
+
+		ResponseEntity<ReturnVO> reEntity = null;
+		memberVO = memberService.selectIdByToken(cookieToken);
+
+		followVO.setFollowerId(memberVO.getUser_Id());
+		ReturnVO reVO = memberService.insertCheckFollow(followVO);
+
+		reEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
+		return reEntity;
+	}
+
+	@RequestMapping(value = "/follow", method = RequestMethod.DELETE)
+	public ResponseEntity<ReturnVO> followDelete(@RequestBody FollowVO followVO,
+			@CookieValue(value = "accesstoken") String cookieToken) {
+
+		ResponseEntity<ReturnVO> resEntity = null;
+		memberVO = memberService.selectIdByToken(cookieToken);
+		followVO.setFollowerId(memberVO.getUser_Id());
+		
+		ReturnVO reVO = memberService.deleteCheckFollow(followVO);
+		resEntity = new ResponseEntity<ReturnVO>(reVO, HttpStatus.OK);
+		return resEntity;
 	}
 
 }
